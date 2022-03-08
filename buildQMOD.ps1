@@ -1,12 +1,79 @@
-$buildScript = "E:/BSMG/Android/android-ndk-r22b/build/ndk-build"
-if (-not ($PSVersionTable.PSEdition -eq "Core")) {
-    $buildScript += ".cmd"
+Param(
+    [String] $qmodname="",
+
+    [Parameter(Mandatory=$false)]
+    [Switch] $clean,
+
+    [Parameter(Mandatory=$false)]
+    [Switch] $help
+)
+
+if ($help -eq $true) {
+    echo "`"BuildQmod <qmodName>`" - Copiles your mod into a `".so`" or a `".a`" library"
+    echo "`n-- Parameters --`n"
+    echo "qmodName `t The file name of your qmod"
+
+    echo "`n-- Arguments --`n"
+
+    echo "-Clean `t`t Performs a clean build on both your library and the qmod"
+
+    exit
 }
 
-$ArchiveName = "fasterscroll_v1.1.0.qmod"
-$TempArchiveName = "fasterscroll_v1.1.0.qmod.zip"
+if ($qmodName -eq "")
+{
+    echo "Give a proper qmod name and try again"
+    exit
+}
 
-& $buildScript NDK_PROJECT_PATH=$PSScriptRoot APP_BUILD_SCRIPT=$PSScriptRoot/Android.mk NDK_APPLICATION_MK=$PSScriptRoot/Application.mk
-Compress-Archive -Path "./libs/arm64-v8a/libfasterscroll.so", ".\Cover.jpg", "./libs/arm64-v8a/libbeatsaber-hook_2_2_4.so", "./mod.json" -DestinationPath $TempArchiveName -Force
-Move-Item $TempArchiveName $ArchiveName -Force
-Read-Host -Prompt "Press Enter to exit"
+& $PSScriptRoot/build.ps1 -clean:$clean
+
+if ($LASTEXITCODE -ne 0) {
+    echo "Failed to build, exiting..."
+    exit $LASTEXITCODE
+}
+
+echo "Creating qmod from mod.json"
+
+$mod = "./mod.json"
+$modJson = Get-Content $mod -Raw | ConvertFrom-Json
+
+$filelist = @($mod)
+
+$cover = "./" + $modJson.coverImage
+if ((-not ($cover -eq "./")) -and (Test-Path $cover))
+{ 
+    $filelist += ,$cover
+}
+
+foreach ($mod in $modJson.modFiles)
+{
+    $path = "./build/" + $mod
+    if (-not (Test-Path $path))
+    {
+        $path = "./extern/libs/" + $mod
+    }
+    $filelist += $path
+}
+
+foreach ($lib in $modJson.libraryFiles)
+{
+    $path = "./extern/libs/" + $lib
+    if (-not (Test-Path $path))
+    {
+        $path = "./build/" + $lib
+    }
+    $filelist += $path
+}
+
+$zip = $qmodName + ".zip"
+$qmod = $qmodName + ".qmod"
+
+if ((-not ($clean.IsPresent)) -and (Test-Path $qmod))
+{
+    echo "Making Clean Qmod"
+    Move-Item $qmod $zip -Force
+}
+
+Compress-Archive -Path $filelist -DestinationPath $zip -Update
+Move-Item $zip $qmod -Force

@@ -150,7 +150,7 @@ MAKE_HOOK_MATCH(LevelCollectionTableView_OnEnable, &GlobalNamespace::LevelCollec
 }
 
 MAKE_HOOK_MATCH(ScrollView_HandleJoystickWasNotCenteredThisFrame, &HMUI::ScrollView::HandleJoystickWasNotCenteredThisFrame, void, HMUI::ScrollView* self, Vector2 deltaPos) {
-    if (isLinear) {
+    if (getPluginConfig().IsLinear.GetValue()) {
         getLogger().info("it is linear");
         if(to_utf8(csstrtostr(self->get_transform()->get_parent()->get_gameObject()->get_name())) == str && isntStock) {
             ScrollViewPatcherDynamic(self);
@@ -207,6 +207,7 @@ extern "C" void load() {
   il2cpp_functions::Init();
   QuestUI::Init();
   QuestUI::Register::RegisterModSettingsViewController(modInfo, DidActivate);
+  //uestUI::Register::RegisterMainMenuModSettingsViewController(modInfo, DidActivate);
   INSTALL_HOOK(getLogger(), LevelCollectionTableView_OnEnable);
   INSTALL_HOOK(getLogger(), ScrollView_Awake);
   INSTALL_HOOK(getLogger(), ScrollView_HandleJoystickWasNotCenteredThisFrame);

@@ -1,19 +1,18 @@
-
 {
-    "_QPVersion": "0.1.0",
-    "name": "Faster Scroll",
-    "id": "fasterscroll",
-    "author": "Christoffyw",
-    "version": "1.1.0",
-    "coverImage": "Cover.jpg",
-    "packageId": "com.beatgames.beatsaber",
-    "packageVersion": "1.16.4",
-    "description": "Find your song faster with this customizable faster scrolling mod.",
-    "type": "Gameplay",
-    "modFiles": [
-        "libfasterscroll.so"
-    ],
-    "libraryFiles": [
-        "libbeatsaber-hook_2_2_4.so"
-    ]
+	"_QPVersion": "0.1.1",
+	"name": "Faster Scroll",
+	"id": "fasterscroll",
+	"author": "Christoffyw",
+	"version": "1.5.0",
+	"packageId": "com.beatgames.beatsaber",
+	"packageVersion": "1.19.1",
+	"description": "Find your songs faster using this mod.",
+	"dependencies": [],
+	"modFiles": [
+		"libfasterscroll.so"
+	],
+	"libraryFiles": [
+		"libbeatsaber-hook_3_6_7.so"
+	],
+	"fileCopies": []
 }

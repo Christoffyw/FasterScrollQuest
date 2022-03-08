@@ -4,34 +4,34 @@
   "info": {
     "name": "Faster Scroll",
     "id": "fasterscroll",
-    "version": "0.1.0",
+    "version": "1.5.0",
     "url": null,
     "additionalData": {}
   },
   "dependencies": [
     {
       "id": "codegen",
-      "versionRange": "*",
+      "versionRange": "^0.20.0",
       "additionalData": {}
     },
     {
       "id": "questui",
-      "versionRange": "*",
+      "versionRange": "^0.13.1",
       "additionalData": {}
     },
     {
       "id": "custom-types",
-      "versionRange": "*",
+      "versionRange": "^0.15.6",
       "additionalData": {}
     },
     {
       "id": "config-utils",
-      "versionRange": "*",
+      "versionRange": "^0.7.2",
       "additionalData": {}
     },
     {
       "id": "beatsaber-hook",
-      "versionRange": "^2.0.0",
+      "versionRange": "^3.0.0",
       "additionalData": {}
     }
   ],

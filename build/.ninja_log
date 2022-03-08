@@ -1,0 +1,10 @@
+# ninja log v5
+19	6313	6661221812878727	CMakeFiles/fasterscroll_0_1_0.dir/src/PluginConfig.cpp.o	bc5348de3e149464
+29	7705	6661221826750690	CMakeFiles/fasterscroll_0_1_0.dir/src/main.cpp.o	b8927397f0742fe4
+12492	15537	6684763718125745	libfasterscroll_1_4_0.so	c576b96860114d8
+7705	8311	6661221832630760	libfasterscroll_0_1_0.so	6df08dd891d30775
+28	12188	6684763684651938	CMakeFiles/fasterscroll_1_4_0.dir/src/PluginConfig.cpp.o	c3831af54d39841f
+19	12492	6684763688220008	CMakeFiles/fasterscroll_1_4_0.dir/src/main.cpp.o	fdb565cfb2914b8d
+8	6562	6684767535861058	CMakeFiles/fasterscroll.dir/src/PluginConfig.cpp.o	b40b37e29d42c2ae
+0	7924	6684767549517809	CMakeFiles/fasterscroll.dir/src/main.cpp.o	b62559f92bfd31e8
+7924	8446	6684767554402015	libfasterscroll.so	b43ca32595b00126
