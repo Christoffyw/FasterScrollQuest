@@ -19,7 +19,6 @@
 # Fortran module files
 *.mod
 *.smod
-*.qmod
 
 # Compiled Static libraries
 *.lai
@@ -46,8 +45,8 @@ ndkpath.txt
 *.zip
 *.txt
 extern/
-cmake-build-debug/
-.idea/
-.vscode/
 Android.mk.backup
 qpm.shared.json
+cmake-build-debug/
+build/
+.idea/
