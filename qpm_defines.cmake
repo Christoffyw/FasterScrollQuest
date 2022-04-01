@@ -1,11 +1,11 @@
 # YOU SHOULD NOT MANUALLY EDIT THIS FILE, QPM WILL VOID ALL CHANGES
 # Version defines, pretty useful
-set(MOD_VERSION "1.4.0")
+set(MOD_VERSION "1.5.0")
 # take the mod name and just remove spaces, that will be MOD_ID, if you don't like it change it after the include of this file
 set(MOD_ID "FasterScroll")
 
 # derived from override .so name or just id_version
-set(COMPILE_ID "fasterscroll")
+set(COMPILE_ID "FasterScroll")
 # derived from whichever codegen package is installed, will default to just codegen
 set(CODEGEN_ID "codegen")
 

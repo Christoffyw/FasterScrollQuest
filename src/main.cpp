@@ -87,8 +87,7 @@ float m_fRumbleStrength;
 std::string str = "LevelsTableView";
 
 void SetStockScrollSpeed(ScrollView* sv) {
-    m_fStockScrollSpeed = sv->joystickScrollSpeed;
-    getLogger().info("SetStockScrollSpeed");
+    m_fStockScrollSpeed = sv->dyn__joystickScrollSpeed();
 }
 
 void ScrollViewPatcherDynamic(ScrollView* sv)
@@ -102,30 +101,26 @@ void ScrollViewPatcherDynamic(ScrollView* sv)
     }
 
     m_fCustomSpeed = Mathf::Clamp(m_fInertia * m_fStockScrollSpeed, 0.0f, getPluginConfig().MaxSpeed.GetValue());
-    sv->joystickScrollSpeed = m_fCustomSpeed;
+    sv->dyn__joystickScrollSpeed() = m_fCustomSpeed;
 }
 
 void ScrollViewPatcherConstant(LevelCollectionTableView* lctv)
 {
-    TableView* tv = lctv->tableView;
+    TableView* tv = lctv->dyn__tableView();
     ScrollView* sv = tv->GetComponent<ScrollView*>();
 
     if (to_utf8(csstrtostr(sv->get_transform()->get_parent()->get_gameObject()->get_name())) == str) {
-        sv->joystickScrollSpeed = getPluginConfig().MaxSpeed.GetValue();
-        getLogger().info("ScrollViewPatcherConstant");
-    }
-    else {
-        getLogger().info("%s", to_utf8(csstrtostr(sv->get_transform()->get_parent()->get_gameObject()->get_name())).c_str());
+        sv->dyn__joystickScrollSpeed() = getPluginConfig().MaxSpeed.GetValue();
     }
 }
 
 void ScrollViewPatcherStock(LevelCollectionTableView* lctv)
 {
-    TableView* tv = lctv->tableView;
+    TableView* tv = lctv->dyn__tableView();
     ScrollView* sv = tv->GetComponent<ScrollView*>();
 
     if (to_utf8(csstrtostr(sv->get_transform()->get_parent()->get_gameObject()->get_name())) == str) {
-        sv->joystickScrollSpeed = m_fStockScrollSpeed;
+        sv->dyn__joystickScrollSpeed() = m_fStockScrollSpeed;
     }
 }
 
@@ -151,13 +146,9 @@ MAKE_HOOK_MATCH(LevelCollectionTableView_OnEnable, &GlobalNamespace::LevelCollec
 
 MAKE_HOOK_MATCH(ScrollView_HandleJoystickWasNotCenteredThisFrame, &HMUI::ScrollView::HandleJoystickWasNotCenteredThisFrame, void, HMUI::ScrollView* self, Vector2 deltaPos) {
     if (getPluginConfig().IsLinear.GetValue()) {
-        getLogger().info("it is linear");
         if(to_utf8(csstrtostr(self->get_transform()->get_parent()->get_gameObject()->get_name())) == str && isntStock) {
             ScrollViewPatcherDynamic(self);
         }
-    }
-    else {
-        getLogger().info("it isn't linear :(");
     }
 
     ScrollView_HandleJoystickWasNotCenteredThisFrame(self, deltaPos);

@@ -3,35 +3,46 @@
   "dependenciesDir": "extern",
   "info": {
     "name": "Faster Scroll",
-    "id": "fasterscroll",
+    "id": "FasterScroll",
     "version": "1.5.0",
     "url": null,
-    "additionalData": {}
+    "additionalData": {
+      "overrideSoName": "libFasterScroll.so"
+    }
   },
   "dependencies": [
     {
+      "id": "beatsaber-hook",
+      "versionRange": "^3.7.4",
+      "additionalData": {
+        "extraFiles": [
+          "src/inline-hook"
+        ]
+      }
+    },
+    {
+      "id": "modloader",
+      "versionRange": "=1.2.3",
+      "additionalData": {}
+    },
+    {
       "id": "codegen",
-      "versionRange": "^0.20.0",
+      "versionRange": "^0.22.0",
       "additionalData": {}
     },
     {
       "id": "questui",
-      "versionRange": "^0.13.1",
+      "versionRange": "^0.13.5",
       "additionalData": {}
     },
     {
       "id": "custom-types",
-      "versionRange": "^0.15.6",
+      "versionRange": "^0.15.9",
       "additionalData": {}
     },
     {
       "id": "config-utils",
       "versionRange": "^0.7.2",
-      "additionalData": {}
-    },
-    {
-      "id": "beatsaber-hook",
-      "versionRange": "^3.0.0",
       "additionalData": {}
     }
   ],
