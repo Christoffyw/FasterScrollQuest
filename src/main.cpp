@@ -87,7 +87,7 @@ float m_fRumbleStrength;
 std::string str = "LevelsTableView";
 
 void SetStockScrollSpeed(ScrollView* sv) {
-    m_fStockScrollSpeed = sv->dyn__joystickScrollSpeed();
+    m_fStockScrollSpeed = sv->joystickScrollSpeed;
 }
 
 void ScrollViewPatcherDynamic(ScrollView* sv)
@@ -101,26 +101,26 @@ void ScrollViewPatcherDynamic(ScrollView* sv)
     }
 
     m_fCustomSpeed = Mathf::Clamp(m_fInertia * m_fStockScrollSpeed, 0.0f, getPluginConfig().MaxSpeed.GetValue());
-    sv->dyn__joystickScrollSpeed() = m_fCustomSpeed;
+    sv->joystickScrollSpeed = m_fCustomSpeed;
 }
 
 void ScrollViewPatcherConstant(LevelCollectionTableView* lctv)
 {
-    TableView* tv = lctv->dyn__tableView();
+    TableView* tv = lctv->tableView;
     ScrollView* sv = tv->GetComponent<ScrollView*>();
 
     if (to_utf8(csstrtostr(sv->get_transform()->get_parent()->get_gameObject()->get_name())) == str) {
-        sv->dyn__joystickScrollSpeed() = getPluginConfig().MaxSpeed.GetValue();
+        sv->joystickScrollSpeed = getPluginConfig().MaxSpeed.GetValue();
     }
 }
 
 void ScrollViewPatcherStock(LevelCollectionTableView* lctv)
 {
-    TableView* tv = lctv->dyn__tableView();
+    TableView* tv = lctv->tableView;
     ScrollView* sv = tv->GetComponent<ScrollView*>();
 
     if (to_utf8(csstrtostr(sv->get_transform()->get_parent()->get_gameObject()->get_name())) == str) {
-        sv->dyn__joystickScrollSpeed() = m_fStockScrollSpeed;
+        sv->joystickScrollSpeed = m_fStockScrollSpeed;
     }
 }
 
