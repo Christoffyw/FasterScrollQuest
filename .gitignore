@@ -50,3 +50,5 @@ qpm.shared.json
 cmake-build-debug/
 build/
 .idea/
+*.ninja
+*.log
