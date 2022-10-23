@@ -3,9 +3,9 @@
 	"name": "Faster Scroll",
 	"id": "FasterScroll",
 	"author": "Christoffyw",
-	"version": "1.6.0",
+	"version": "1.7.0",
 	"packageId": "com.beatgames.beatsaber",
-	"packageVersion": "1.24.0",
+	"packageVersion": "1.25.1",
 	"description": "Find your songs faster using this mod.",
 	"dependencies": [],
 	"coverImage": "Cover.jpg",
@@ -13,7 +13,7 @@
 		"libFasterScroll.so"
 	],
 	"libraryFiles": [
-		"libbeatsaber-hook_3_10_0.so"
+		"libbeatsaber-hook_3_14_0.so"
 	],
 	"fileCopies": []
 }

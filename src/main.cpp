@@ -179,12 +179,9 @@ void DidActivate(HMUI::ViewController* self, bool firstActivation, bool addedToH
         isntStock = getPluginConfig().IsStock.GetValue();
 
         auto* textGrid = container;
-        //        textGrid->set_spacing(1);
 
         QuestUI::BeatSaberUI::CreateText(textGrid->get_transform(), "Faster Scroll Mod settings.");
         QuestUI::BeatSaberUI::AddHoverHint(AddConfigValueToggle(textGrid->get_transform(), getPluginConfig().IsStock)->get_gameObject(),"Toggles whether the mod is active or not.");
-
-        //        buttonsGrid->set_spacing(1);
 
         auto* floatGrid = container;
 
@@ -198,7 +195,6 @@ extern "C" void load() {
   il2cpp_functions::Init();
   QuestUI::Init();
   QuestUI::Register::RegisterModSettingsViewController(modInfo, DidActivate);
-  //uestUI::Register::RegisterMainMenuModSettingsViewController(modInfo, DidActivate);
   INSTALL_HOOK(getLogger(), LevelCollectionTableView_OnEnable);
   INSTALL_HOOK(getLogger(), ScrollView_Awake);
   INSTALL_HOOK(getLogger(), ScrollView_HandleJoystickWasNotCenteredThisFrame);
