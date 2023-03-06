@@ -1,6 +1,6 @@
 # YOU SHOULD NOT MANUALLY EDIT THIS FILE, QPM WILL VOID ALL CHANGES
 # Version defines, pretty useful
-set(MOD_VERSION "1.7.0")
+set(MOD_VERSION "1.8.0")
 # take the mod name and just remove spaces, that will be MOD_ID, if you don't like it change it after the include of this file
 set(MOD_ID "FasterScroll")
 

@@ -4,7 +4,7 @@
   "info": {
     "name": "Faster Scroll",
     "id": "FasterScroll",
-    "version": "1.6.0",
+    "version": "1.8.0",
     "url": null,
     "additionalData": {
       "overrideSoName": "libFasterScroll.so"
@@ -27,22 +27,22 @@
     },
     {
       "id": "codegen",
-      "versionRange": "^0.28.0",
+      "versionRange": "^0.33.0",
       "additionalData": {}
     },
     {
       "id": "questui",
-      "versionRange": "^0.17.3",
+      "versionRange": "^0.17.11",
       "additionalData": {}
     },
     {
       "id": "custom-types",
-      "versionRange": "^0.15.21",
+      "versionRange": "^0.15.23",
       "additionalData": {}
     },
     {
       "id": "config-utils",
-      "versionRange": "^0.8.0",
+      "versionRange": "^1.0.2",
       "additionalData": {}
     }
   ],
