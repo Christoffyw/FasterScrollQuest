@@ -1,4 +1,6 @@
 {
+  "version": "0.2.0",
+  "sharedDir": "shared",
   "sharedDir": "shared",
   "dependenciesDir": "extern",
   "info": {
@@ -7,7 +9,34 @@
     "version": "1.8.0",
     "url": null,
     "additionalData": {
-      "overrideSoName": "libFasterScroll.so"
+      "overrideSoName": "libFasterScroll.so",
+      "cmake": true
+    }
+  },
+  "workspace": {
+    "scripts": {
+      "build": [
+        "pwsh ./scripts/build.ps1"
+      ],
+      "copy": [
+        "pwsh ./scripts/copy.ps1"
+      ],
+      "logcat": [
+        "pwsh ./scripts/start-logging.ps1"
+      ],
+      "qmod": [
+        "pwsh ./scripts/build.ps1",
+        "pwsh ./scripts/createqmod.ps1"
+      ],
+      "restart": [
+        "pwsh ./scripts/restart-game.ps1"
+      ],
+      "stack": [
+        "pwsh ./scripts/ndk-stack.ps1"
+      ],
+      "tomb": [
+        "pwsh ./scripts/pull-tombstone.ps1"
+      ]
     }
   },
   "dependencies": [
