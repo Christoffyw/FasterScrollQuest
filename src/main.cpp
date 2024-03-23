@@ -1,4 +1,4 @@
-#include "PluginConfig.hpp"
+#include "Config.hpp"
 #include "main.hpp"
 
 #include "UnityEngine/GameObject.hpp"
@@ -26,51 +26,31 @@
 #include "TMPro/TextMeshProUGUI.hpp"
 
 #include "GlobalNamespace/LevelCollectionTableView.hpp"
-#include "GlobalNamespace/HapticFeedbackController.hpp"
 
 #include "beatsaber-hook/shared/utils/il2cpp-utils.hpp"
 #include "custom-types/shared/types.hpp"
 #include "custom-types/shared/macros.hpp"
 #include "custom-types/shared/register.hpp"
-#include "questui/shared/QuestUI.hpp"
-#include "questui/shared/BeatSaberUI.hpp"
+#include "bsml/shared/BSML.hpp"
+#include "bsml/shared/BSML-Lite/Creation/Layout.hpp"
 #include <iostream>
 #include <string>
 
 using namespace std;
 using namespace HMUI;
 using namespace GlobalNamespace;
-using namespace QuestUI;
+using namespace BSML;
 using namespace UnityEngine;
 
-DEFINE_TYPE(FasterScroll, Main);
-
-static ModInfo modInfo; // Stores the ID and version of our mod, and is sent to the modloader upon startup
-
-// Loads the config from disk using our modInfo, then returns it for use
-Configuration& getConfig() {
-    static Configuration configuration(modInfo);
-    return configuration;
-}
-
-// Returns a logger, useful for printing debug messages
-Logger& getLogger() {
-    static Logger* logger = new Logger(modInfo);
-    return *logger;
-}
-
 // Called at the early stages of game loading
-extern "C" void setup(ModInfo& info) {
-    info.id = ID;
+MOD_EXPORT_FUNC void setup(CModInfo& info) {
+    info.id = MOD_ID;
     info.version = VERSION;
-    modInfo = info;
-	
-    getConfig().Load();
-    getPluginConfig().Init(info);
-    getConfig().Reload();
-    getConfig().Write();
+    modInfo.assign(info);
 
-    getLogger().info("Completed setup!");
+    getConfig().Init(modInfo);
+
+    Logger.info("Completed setup!");
 }
 
 float m_fStockScrollSpeed;
@@ -78,49 +58,50 @@ float m_fInertia;
 float m_fCustomSpeed; // stock value : 60.0f
 float m_fScrollTimer;
 
-bool isLinear = true;
-bool isntStock = true;
+#define isLinear (getConfig().IsLinear.GetValue())
+#define isntStock (getConfig().IsStock.GetValue())
+#define accel (getConfig().Accel.GetValue())
+#define maxSpeed (getConfig().MaxSpeed.GetValue())
 
-HapticFeedbackController* m_oHaptic;
 float m_fVanillaStockRumbleStrength; // stock value : 1.0f (will be set ONCE at launch)
 float m_fRumbleStrength;
 std::string str = "LevelsTableView";
 
 void SetStockScrollSpeed(ScrollView* sv) {
-    m_fStockScrollSpeed = sv->joystickScrollSpeed;
+    m_fStockScrollSpeed = sv->____joystickScrollSpeed;
 }
 
 void ScrollViewPatcherDynamic(ScrollView* sv)
 {
     m_fScrollTimer += Time::get_deltaTime();
 
-    if(isLinear) {
-        m_fInertia = getPluginConfig().Accel.GetValue() * m_fScrollTimer;
+    if(!isLinear) {
+        m_fInertia = accel * m_fScrollTimer;
     } else {
         return;
     }
 
-    m_fCustomSpeed = Mathf::Clamp(m_fInertia * m_fStockScrollSpeed, 0.0f, getPluginConfig().MaxSpeed.GetValue());
-    sv->joystickScrollSpeed = m_fCustomSpeed;
+    m_fCustomSpeed = Mathf::Clamp(m_fInertia * m_fStockScrollSpeed, 0.0f, maxSpeed);
+    sv->____joystickScrollSpeed = m_fCustomSpeed;
 }
 
 void ScrollViewPatcherConstant(LevelCollectionTableView* lctv)
 {
-    TableView* tv = lctv->tableView;
+    TableView* tv = lctv->____tableView;
     ScrollView* sv = tv->GetComponent<ScrollView*>();
 
-    if (to_utf8(csstrtostr(sv->get_transform()->get_parent()->get_gameObject()->get_name())) == str) {
-        sv->joystickScrollSpeed = getPluginConfig().MaxSpeed.GetValue();
+    if (StringW(sv->get_transform()->get_parent()->get_gameObject()->get_name()) == str) {
+        sv->____joystickScrollSpeed = maxSpeed;
     }
 }
 
 void ScrollViewPatcherStock(LevelCollectionTableView* lctv)
 {
-    TableView* tv = lctv->tableView;
+    TableView* tv = lctv->____tableView;
     ScrollView* sv = tv->GetComponent<ScrollView*>();
 
-    if (to_utf8(csstrtostr(sv->get_transform()->get_parent()->get_gameObject()->get_name())) == str) {
-        sv->joystickScrollSpeed = m_fStockScrollSpeed;
+    if (StringW(sv->get_transform()->get_parent()->get_gameObject()->get_name()) == str) {
+        sv->____joystickScrollSpeed = m_fStockScrollSpeed;
     }
 }
 
@@ -139,14 +120,14 @@ MAKE_HOOK_MATCH(LevelCollectionTableView_OnEnable, &GlobalNamespace::LevelCollec
         ScrollViewPatcherStock(self);
         return;
     }
-    if(!isLinear && isntStock)
+    if(isLinear && isntStock)
         ScrollViewPatcherConstant(self);
     LevelCollectionTableView_OnEnable(self);
 }
 
 MAKE_HOOK_MATCH(ScrollView_HandleJoystickWasNotCenteredThisFrame, &HMUI::ScrollView::HandleJoystickWasNotCenteredThisFrame, void, HMUI::ScrollView* self, Vector2 deltaPos) {
-    if (getPluginConfig().IsLinear.GetValue()) {
-        if(to_utf8(csstrtostr(self->get_transform()->get_parent()->get_gameObject()->get_name())) == str && isntStock) {
+    if (!isLinear) {
+        if(StringW(self->get_transform()->get_parent()->get_gameObject()->get_name()) == str && isntStock) {
             ScrollViewPatcherDynamic(self);
         }
     }
@@ -155,49 +136,36 @@ MAKE_HOOK_MATCH(ScrollView_HandleJoystickWasNotCenteredThisFrame, &HMUI::ScrollV
 }
 
 MAKE_HOOK_MATCH(ScrollView_HandleJoystickWasCenteredThisFrame, &HMUI::ScrollView::HandleJoystickWasCenteredThisFrame, void, HMUI::ScrollView* self) {
-    if (isLinear && to_utf8(csstrtostr(self->get_transform()->get_parent()->get_gameObject()->get_name())) == str)
+    if (!isLinear && StringW(self->get_transform()->get_parent()->get_gameObject()->get_name()) == str)
         ResetInertia();
     ScrollView_HandleJoystickWasCenteredThisFrame(self);
 }
 
-void FasterScroll::Main::Update() {
-    isLinear = getPluginConfig().IsLinear.GetValue();
-    isntStock = getPluginConfig().IsStock.GetValue();
-}
-
 void DidActivate(HMUI::ViewController* self, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling){
-    getLogger().info("DidActivate: %p, %d, %d, %d", self, firstActivation, addedToHierarchy, screenSystemEnabling);
+    Logger.info("DidActivate: {}, {}, {}", firstActivation, addedToHierarchy, screenSystemEnabling);
 
+    if (!firstActivation)
+        return;
 
+    self->get_gameObject()->AddComponent<HMUI::Touchable*>();
+    auto vertical = BSML::Lite::CreateVerticalLayoutGroup(self);
+    vertical->set_childControlHeight(false);
+    vertical->set_childForceExpandHeight(false);
+    vertical->set_spacing(1);
 
-    if(firstActivation) {
-        self->get_gameObject()->AddComponent<HMUI::Touchable*>();
-        self->get_gameObject()->AddComponent<FasterScroll::Main*>();
-        GameObject* container = QuestUI::BeatSaberUI::CreateScrollableSettingsContainer(self->get_transform());
-        ResetInertia();
-        isLinear = getPluginConfig().IsLinear.GetValue();
-        isntStock = getPluginConfig().IsStock.GetValue();
-
-        auto* textGrid = container;
-
-        QuestUI::BeatSaberUI::CreateText(textGrid->get_transform(), "Faster Scroll Mod settings.");
-        QuestUI::BeatSaberUI::AddHoverHint(AddConfigValueToggle(textGrid->get_transform(), getPluginConfig().IsStock)->get_gameObject(),"Toggles whether the mod is active or not.");
-
-        auto* floatGrid = container;
-
-        QuestUI::BeatSaberUI::AddHoverHint(AddConfigValueIncrementFloat(floatGrid->get_transform(), getPluginConfig().MaxSpeed, 0, 10, 30, 1000)->get_gameObject(),"Changes the speed of scrolling with the joystick. Default: 600");
-        QuestUI::BeatSaberUI::AddHoverHint(AddConfigValueIncrementFloat(floatGrid->get_transform(), getPluginConfig().Accel, 1, 0.1, 0.5, 5)->get_gameObject(),"Changes the acceleration speed of scrolling with the joystick. Default: 1.5");
-        QuestUI::BeatSaberUI::AddHoverHint(AddConfigValueToggle(floatGrid->get_transform(), getPluginConfig().IsLinear)->get_gameObject(),"Toggles whether you want to use acceleration or not.");
-    }
+    BSML::Lite::AddHoverHint(AddConfigValueToggle(vertical, getConfig().IsStock)->get_gameObject(),"Toggles whether the mod is active or not.");
+    BSML::Lite::AddHoverHint(AddConfigValueIncrementFloat(vertical, getConfig().MaxSpeed, 0, 10, 30, 1000)->get_gameObject(),"Changes the speed of scrolling with the joystick. Default: 600");
+    BSML::Lite::AddHoverHint(AddConfigValueIncrementFloat(vertical, getConfig().Accel, 1, 0.1, 0.5, 5)->get_gameObject(),"Changes the acceleration speed of scrolling with the joystick. Default: 1.5");
+    BSML::Lite::AddHoverHint(AddConfigValueToggle(vertical, getConfig().IsLinear)->get_gameObject(),"Toggles whether you want to use acceleration or not.");
 }
 
 extern "C" void load() {
   il2cpp_functions::Init();
-  QuestUI::Init();
-  QuestUI::Register::RegisterModSettingsViewController(modInfo, DidActivate);
-  INSTALL_HOOK(getLogger(), LevelCollectionTableView_OnEnable);
-  INSTALL_HOOK(getLogger(), ScrollView_Awake);
-  INSTALL_HOOK(getLogger(), ScrollView_HandleJoystickWasNotCenteredThisFrame);
-  INSTALL_HOOK(getLogger(), ScrollView_HandleJoystickWasCenteredThisFrame);
+  BSML::Init();
+  BSML::Register::RegisterSettingsMenu("Faster Scroll", DidActivate, false);
+  INSTALL_HOOK(Logger, LevelCollectionTableView_OnEnable);
+  INSTALL_HOOK(Logger, ScrollView_Awake);
+  INSTALL_HOOK(Logger, ScrollView_HandleJoystickWasNotCenteredThisFrame);
+  INSTALL_HOOK(Logger, ScrollView_HandleJoystickWasCenteredThisFrame);
   custom_types::Register::AutoRegister();
 }

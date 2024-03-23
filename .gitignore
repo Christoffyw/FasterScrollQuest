@@ -53,3 +53,18 @@ build/
 *.ninja
 *.log
 *.qmod
+
+# QPM stuff
+[Ee]xtern/
+*.qmod
+mod.json
+qpm_defines.cmake
+![Cc][Mm]ake[Ll]ists.txt
+
+# CMake stuff
+[Bb]uild/
+cmake-build-*/
+extern.cmake
+
+# QMOD Schema
+mod.json.schema
