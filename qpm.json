@@ -1,7 +1,6 @@
 {
   "version": "0.2.0",
   "sharedDir": "shared",
-  "sharedDir": "shared",
   "dependenciesDir": "extern",
   "info": {
     "name": "Faster Scroll",
@@ -42,36 +41,42 @@
   "dependencies": [
     {
       "id": "beatsaber-hook",
-      "versionRange": "^3.14.0",
+      "versionRange": "^5.1.2",
+      "additionalData": {}
+    },
+    {
+      "id": "paper",
+      "versionRange": "^3.0.0",
       "additionalData": {
-        "extraFiles": [
-          "src/inline-hook"
-        ]
+        "private": true
       }
     },
     {
-      "id": "modloader",
-      "versionRange": "*",
+      "id": "bs-cordl",
+      "versionRange": "3500.*",
       "additionalData": {}
     },
     {
-      "id": "codegen",
-      "versionRange": "^0.33.0",
-      "additionalData": {}
+      "id": "scotland2",
+      "versionRange": "^0.1.0",
+      "additionalData": {
+        "includeQmod": false,
+        "private": true
+      }
     },
     {
-      "id": "questui",
-      "versionRange": "^0.17.11",
+      "id": "bsml",
+      "versionRange": "^0.4.15",
       "additionalData": {}
     },
     {
       "id": "custom-types",
-      "versionRange": "^0.15.23",
+      "versionRange": "^0.17.3",
       "additionalData": {}
     },
     {
       "id": "config-utils",
-      "versionRange": "^1.0.2",
+      "versionRange": "^1.4.1",
       "additionalData": {}
     }
   ],
