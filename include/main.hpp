@@ -1,7 +1,7 @@
 #pragma once
 
 // Include the modloader header, which allows us to tell the modloader which mod this is, and the version etc.
-#include "modloader/shared/modloader.hpp"
+#include "scotland2/shared/modloader.h"
 
 // beatsaber-hook is a modding framework that lets us call functions and fetch field values from in the game
 // It also allows creating objects, configuration, and importantly, hooking methods to modify their values
@@ -19,9 +19,16 @@
 
 using namespace UnityEngine;
 
-DECLARE_CLASS_CODEGEN(FasterScroll, Main, MonoBehaviour,
-   DECLARE_INSTANCE_METHOD(void, Update);
-)
+/// @brief Stores the ID and version of our mod, and is sent to the modloader upon startup
+modloader::ModInfo modInfo{MOD_ID, VERSION, 0};
 
-Configuration& getConfig();
-Logger& getLogger();
+/// @brief A logger, useful for printing debug messages
+/// @return
+static constexpr auto Logger = Paper::ConstLoggerContext(MOD_ID);
+
+#define MOD_EXPORT __attribute__((visibility("default")))
+#ifdef __cplusplus
+#define MOD_EXPORT_FUNC extern "C" MOD_EXPORT
+#else
+#define MOD_EXPORT_FUNC MOD_EXPORT
+#endif

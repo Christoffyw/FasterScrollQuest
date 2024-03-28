@@ -1,4 +1,5 @@
 {
+  "version": "0.2.0",
   "sharedDir": "shared",
   "dependenciesDir": "extern",
   "info": {
@@ -7,42 +8,75 @@
     "version": "1.8.0",
     "url": null,
     "additionalData": {
-      "overrideSoName": "libFasterScroll.so"
+      "overrideSoName": "libFasterScroll.so",
+      "cmake": true
+    }
+  },
+  "workspace": {
+    "scripts": {
+      "build": [
+        "pwsh ./scripts/build.ps1"
+      ],
+      "copy": [
+        "pwsh ./scripts/copy.ps1"
+      ],
+      "logcat": [
+        "pwsh ./scripts/start-logging.ps1"
+      ],
+      "qmod": [
+        "pwsh ./scripts/build.ps1",
+        "pwsh ./scripts/createqmod.ps1"
+      ],
+      "restart": [
+        "pwsh ./scripts/restart-game.ps1"
+      ],
+      "stack": [
+        "pwsh ./scripts/ndk-stack.ps1"
+      ],
+      "tomb": [
+        "pwsh ./scripts/pull-tombstone.ps1"
+      ]
     }
   },
   "dependencies": [
     {
       "id": "beatsaber-hook",
-      "versionRange": "^3.14.0",
+      "versionRange": "^5.1.6",
+      "additionalData": {}
+    },
+    {
+      "id": "paper",
+      "versionRange": "^3.6.3",
       "additionalData": {
-        "extraFiles": [
-          "src/inline-hook"
-        ]
+        "private": true
       }
     },
     {
-      "id": "modloader",
-      "versionRange": "*",
+      "id": "bs-cordl",
+      "versionRange": "3500.*",
       "additionalData": {}
     },
     {
-      "id": "codegen",
-      "versionRange": "^0.33.0",
-      "additionalData": {}
+      "id": "scotland2",
+      "versionRange": "^0.1.4",
+      "additionalData": {
+        "includeQmod": false,
+        "private": true
+      }
     },
     {
-      "id": "questui",
-      "versionRange": "^0.17.11",
+      "id": "bsml",
+      "versionRange": "^0.4.18",
       "additionalData": {}
     },
     {
       "id": "custom-types",
-      "versionRange": "^0.15.23",
+      "versionRange": "^0.17.6",
       "additionalData": {}
     },
     {
       "id": "config-utils",
-      "versionRange": "^1.0.2",
+      "versionRange": "^1.4.1",
       "additionalData": {}
     }
   ],
