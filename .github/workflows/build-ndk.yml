@@ -29,7 +29,7 @@ on:
 
 env:
     module_id: FasterScroll
-    qmod_name: FasterScroll
+    qmod_name: Faster Scroll
 
 jobs:
   build:
