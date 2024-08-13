@@ -9,7 +9,7 @@
   "packageVersion": "1.37.0_9064817954",
   "description": "Find your songs faster using this mod.",
   "dependencies": [],
-  "modFiles": [],
+  "modFiles": ["${binary}"],
   "lateModFiles": [],
   "libraryFiles": [],
   "fileCopies": [],
