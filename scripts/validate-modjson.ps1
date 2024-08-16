@@ -1,19 +1,28 @@
 $mod = "./mod.json"
-$template = "./mod.template.json"
-$modTemplate = -not (Test-Path -Path $template) || Get-Item $template
-$modJson = -not (Test-Path -Path $mod) || Get-Item $mod
+$modTemplate = "./mod.template.json"
+$qpmShared = "./qpm.shared.json"
 
-if (-not (Test-Path -Path $mod) -or $modTemplate.LastWriteTime -gt $modJson.LastWriteTime) {
-    if (Test-Path -Path $template) {
-        & qpm qmod build
+if (Test-Path -Path $modTemplate) {
+    $update = -not (Test-Path -Path $mod)
+
+    if (-not $update) {
+        $update = (Get-Item $modTemplate).LastWriteTime -gt (Get-Item $mod).LastWriteTime
+    }
+
+    if (-not $update -and (Test-Path -Path $qpmShared)) {
+        $update = (Get-Item $qpmShared).LastWriteTime -gt (Get-Item $mod).LastWriteTime
+    }
+
+    if ($update) {
+        & qpm qmod manifest
         if ($LASTEXITCODE -ne 0) {
             exit $LASTEXITCODE
         }
     }
-    else {
-        Write-Output "Error: mod.json and mod.template.json were not present"
-        exit 1
-    }
+}
+elseif (-not (Test-Path -Path $mod)) {
+    Write-Output "Error: mod.json and mod.template.json were not present"
+    exit 1
 }
 
 Write-Output "Creating qmod from mod.json"
