@@ -5,6 +5,7 @@
   "modloader": "Scotland2",
   "author": "Christoffyw",
   "version": "${version}",
+  "packageVersion": "1.37.0_9064817954",
   "description": "${mod_id}, version ${version}!",
   "dependencies": [],
   "modFiles": ["${binary}"],
