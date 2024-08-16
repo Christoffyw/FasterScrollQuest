@@ -5,7 +5,7 @@
   "info": {
     "name": "Faster Scroll",
     "id": "FasterScroll",
-    "version": "1.9.0",
+    "version": "1.10.0",
     "url": null,
     "additionalData": {
       "overrideSoName": "libFasterScroll.so",
@@ -41,19 +41,19 @@
   "dependencies": [
     {
       "id": "beatsaber-hook",
-      "versionRange": "^5.1.6",
+      "versionRange": "^5.1.9",
       "additionalData": {}
     },
     {
       "id": "paper",
-      "versionRange": "^3.6.3",
+      "versionRange": "^3.6.4",
       "additionalData": {
         "private": true
       }
     },
     {
       "id": "bs-cordl",
-      "versionRange": "3500.*",
+      "versionRange": "3700.*",
       "additionalData": {}
     },
     {
@@ -66,17 +66,17 @@
     },
     {
       "id": "bsml",
-      "versionRange": "^0.4.18",
+      "versionRange": "^0.4.43",
       "additionalData": {}
     },
     {
       "id": "custom-types",
-      "versionRange": "^0.17.6",
+      "versionRange": "^0.17.10",
       "additionalData": {}
     },
     {
       "id": "config-utils",
-      "versionRange": "^1.4.1",
+      "versionRange": "^1.4.2",
       "additionalData": {}
     }
   ],
